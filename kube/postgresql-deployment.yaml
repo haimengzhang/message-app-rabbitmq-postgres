@@ -1,77 +1,48 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yaml
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
   labels:
-    name: postgres
+    io.kompose.service: postgres
+    tier: database
+  name: postgres
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: postgres
+      io.kompose.service: postgres
+  strategy: {}
   template:
     metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yaml
+        kompose.version: 1.26.0 (40646f47)------------------------------------------
       labels:
-        name: postgres
+        io.kompose.network/resolute: "true"
+        io.kompose.service: postgres
     spec:
       containers:
-        - image: postgres
-          name: postgres
+        - name: postgres
+          image: postgres
           env:
-            - name: POSTGRES_DB
-              valueFrom:
-                configMapKeyRef:
-                  name: postgres-conf
-                  key: name
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-credentials
-                  key: postgres_password
             - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-credentials
-                  key: postgres_user
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_DB
+              value: postgres
           ports:
             - containerPort: 5432
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: postgres-persistence-storage
+              name: postgres-pv
       volumes:
-        - name: postgres-persistence-storage
+        - name: postgres-pv
           persistentVolumeClaim:
-            claimName: postgres-pv-claim
+            claimName: postgres-pv-claim-1
       restartPolicy: Always
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: postgres-pv-claim
-  labels:
-    name: postgres
-    tier: database
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: postgres
-  labels:
-    name: postgres
-    tier: database
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 5432
-  selector:
-    name: postgres
-    tier: database
+status: {}
 
