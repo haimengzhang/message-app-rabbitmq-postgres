@@ -1,0 +1,54 @@
+----------build and deploy message consumer--------
+  mvn install -Dskiptests
+  docker build -t message-consumer .
+  docker rmi miniocean/message-consumer
+  docker tag message-consumer:latest miniocean/message-consumer
+  docker push miniocean/message-consumer
+
+   kubectl delete deploy message-consumer
+   kubectl delete service message-consumer
+   kubectl apply -f message-consumer-deployment.yaml
+   kubectl apply -f message-consumer-service.yaml
+
+ ----------build message producer-----------
+    mvn install -DskipTests
+    docker build -t message-producer .
+    docker rmi miniocean/message-producer
+    docker tag message-producer:latest miniocean/message-producer
+    docker push miniocean/message-producer
+
+  kubectl delete deploy message-publisher
+  kubectl delete service message-publisher
+  kubectl apply -f message-publisher-deployment.yaml
+  kubectl apply -f message-publisher-service.yaml
+
+
+#--------------deploy POSTGRES-------------
+  kubectl delete deploy postgres
+  kubectl delete service postgres
+  kubectl delete pvc postgres-pv-claim
+  kubectl apply -f postgresql-deployment.yaml
+  kubectl apply -f postgresql-service.yaml
+  kubectl apply -f persistent-volume-claim.yaml
+
+  kubectl apply -f pv.yml
+  kubectl apply -f persistent-volume-claim-1.yaml
+  kubectl apply -f persistent-volume.yml
+
+#--------scale up----------------
+    kubectl scale --replicas=3 deployment/postgresql
+
+#--------------logs---------------
+  kubectl logs -f message-publisher-7b6d77d6-spzz7
+
+#----------kubectl commands----------
+    kubectl get pods
+
+#----------ping psql------------
+kubectl get pod postgresql
+kubectl get svc postgres
+kubectl exec -it postgres-598675dbf9-4r6ll  -- psql -U postgres
+
+psql -h localhost -U postgres --password -p 31070 postgres
+
+psql --host=postgresql --dbname=postgres --username=postgres

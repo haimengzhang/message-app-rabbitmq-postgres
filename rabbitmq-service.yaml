@@ -6,15 +6,17 @@ metadata:
     kompose.version: 1.26.0 (40646f47)
   creationTimestamp: null
   labels:
-    io.kompose.service: message-consumer
-  name: message-consumer
+    io.kompose.service: rabbitmq
+  name: rabbitmq
 spec:
-  type: LoadBalancer
   ports:
-    - name: "8091"
-      port: 8091
-      targetPort: 8091
+    - name: "5672"
+      port: 5672
+      targetPort: 5672
+    - name: "15672"
+      port: 15672
+      targetPort: 15672
   selector:
-    io.kompose.service: message-consumer
+    io.kompose.service: rabbitmq
 status:
   loadBalancer: {}

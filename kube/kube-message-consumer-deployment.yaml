@@ -12,6 +12,7 @@ spec:
     metadata:
       labels:
         name: message-consumer
+        io.kompose.network/resolute: "true"
     spec:
       containers:
         - name: message-consumer

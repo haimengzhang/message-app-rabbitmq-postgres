@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert
+    kompose.cmd: kompose convert -f docker-compose.yaml
     kompose.version: 1.26.0 (40646f47)
   creationTimestamp: null
   labels:
@@ -17,7 +17,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert
+        kompose.cmd: kompose convert -f docker-compose.yaml
         kompose.version: 1.26.0 (40646f47)
       creationTimestamp: null
       labels:
@@ -25,26 +25,36 @@ spec:
         io.kompose.service: message-consumer
     spec:
       containers:
-      - name: message-consumer
-        image: message-queue-consumer.jar
-        env:
-            - name: SPRING_DATASOURCE_PASSWORD
-              value: postgres
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://postgresql:5432/postgres
+        - env:
             - name: SPRING_DATASOURCE_USERNAME
               value: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: postgres
+            - name: DB_HOST
+              value: postgres
+            - name: DB_NAME
+              value: postgres
+            #            - name: SPRING_DATASOURCE_URL
+            #              value: jdbc:postgresql://postgres:5432/postgres
             - name: SPRING_JPA_HIBERNATE_DDL_AUTO
               value: update
             - name: spring_rabbitmq_host
               value: rabbitmq
-            - name: spring_rabbitmq_port
-              value: "5672"
             - name: spring_rabbitmq_password
               value: guest
+            - name: spring_rabbitmq_port
+              value: "5672"
             - name: spring_rabbitmq_username
               value: guest
-        ports:
-          - containerPort: 8091
+          image: miniocean/message-consumer
+          name: message-consumer
+          ports:
+            - containerPort: 8091
+          resources: {}
       restartPolicy: Always
-status: {}
+status:
+
+
+
+
+
