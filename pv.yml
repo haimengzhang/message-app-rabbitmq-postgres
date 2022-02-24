@@ -2,7 +2,7 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: postgres-pv-1
+  name: pv
   labels:
     io.kompose.service: postgres
     type: local

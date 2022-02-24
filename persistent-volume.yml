@@ -8,8 +8,6 @@ metadata:
     type: local
 spec:
   storageClassName: manual
-  claimRef:
-    name: postgres-pvc
   capacity:
     storage: 1Gi
   accessModes:

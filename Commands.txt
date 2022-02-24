@@ -35,6 +35,13 @@
   kubectl apply -f persistent-volume-claim-1.yaml
   kubectl apply -f persistent-volume.yml
 
+
+
+#------------minikube service ------------
+    minikube service message-publisher
+
+    minikube service message-consumer
+
 #--------scale up----------------
     kubectl scale --replicas=3 deployment/postgresql
 
@@ -52,3 +59,9 @@ kubectl exec -it postgres-598675dbf9-4r6ll  -- psql -U postgres
 psql -h localhost -U postgres --password -p 31070 postgres
 
 psql --host=postgresql --dbname=postgres --username=postgres
+
+
+----- In case the deletion of persistent volume is blocked ----------
+    kubectl patch pvc pvc_name -p '{"metadata":{"finalizers":null}}'
+    kubectl patch pv pv_name -p '{"metadata":{"finalizers":null}}'
+    kubectl patch pod pod_name -p '{"metadata":{"finalizers":null}}'
