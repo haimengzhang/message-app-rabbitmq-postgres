@@ -1,0 +1,8 @@
+/Users/kylehe/repo/spring-boot-message-service/spring-boot-message-producer/src/main/java/com/example/messagepublisher/dto/MessageInfo.java
+/Users/kylehe/repo/spring-boot-message-service/spring-boot-message-producer/src/main/java/com/example/messagepublisher/Util/Util.java
+/Users/kylehe/repo/spring-boot-message-service/spring-boot-message-producer/src/main/java/com/example/messagepublisher/service/MessageService.java
+/Users/kylehe/repo/spring-boot-message-service/spring-boot-message-producer/src/main/java/com/example/messagepublisher/PostgresqlApplication.java
+/Users/kylehe/repo/spring-boot-message-service/spring-boot-message-producer/src/main/java/com/example/messagepublisher/controller/MessagePublisher.java
+/Users/kylehe/repo/spring-boot-message-service/spring-boot-message-producer/src/main/java/com/example/messagepublisher/messagequeue/MQConfig.java
+/Users/kylehe/repo/spring-boot-message-service/spring-boot-message-producer/src/main/java/com/example/messagepublisher/converter/HashMapConverter.java
+/Users/kylehe/repo/spring-boot-message-service/spring-boot-message-producer/src/main/java/com/example/messagepublisher/Util/Constants.java
