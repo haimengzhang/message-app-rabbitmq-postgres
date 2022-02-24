@@ -4,9 +4,11 @@
 ### Setup
 
 Install kubernetes, minikube and docker on your machine. Also, install Postman to test the endpoints.
+There are two local images built and pushed to docker hub so that we can use in kubernetes.
 
 Start the kubernetes cluster with 8GB of RAM:
-``` minikube start \
+``` 
+minikube start \
   --memory 8096 \
   --extra-config=controller-manager.horizontal-pod-autoscaler-upscale-delay=1m \
   --extra-config=controller-manager.horizontal-pod-autoscaler-downscale-delay=2m \
@@ -68,7 +70,11 @@ This is the address we will use for our POST request.
 Note, the URL changes each time you restart the pod.
 
 Now, draft a request Json and use postman to post to the endpoint:
+```
 POST <message-publisher-url>/message/publish
+
+```
+
 ```
 {
 
@@ -82,12 +88,17 @@ POST <message-publisher-url>/message/publish
         "priority": 1
 }
 ```
-Workflow of pushing message to queue and saving to database.
-1. User post a message to endpoint /publish/message on the publisher pod host.
-2. Kubernetes cluster will schedule the available nodes to run pods. Traffic is distributed among the pods.
-2. Message publisher pod will push the messages to a queue hosted by the rabbitmq pods.
-4. Message consumer pod will listen and poll from the queue, and save the data to the database running on postgres pod.
+Next, extract the message-consumer URL the same way as above and verify that the message is saved to our Postgres database:
 
+```
+GET <message-consumer-URL>/message
+```
+
+Underneath of pushing and polling messages to save to database:
+1. User post a message to endpoint on the publisher pod.
+2. Kubernetes cluster schedules the available nodes to run the pods. Traffic is distributed among the same pods.
+2. Message publisher pods will push the messages to a queue hosted by the rabbitmq pods.
+4. Message consumer pods will listen and poll from the queue, and save the data to the database running on postgres pod.
 
 ### Productionize it
 
@@ -95,8 +106,8 @@ Now that we have our service, I want to scale up the deployment so that it handl
 To better scale the services and pods, I have decoupled the application to four different components so that they can be scaled independently.
 For example, we could have hundreds of message publishers running and a single instance of the message producer.
 
-In this application, there is one container per pod. Each pod runs an instance of the application container on the cluster nodes independent of one another.
-In need of large traffic, we can scale up the number of pods in deployment to have more instances of each application running.
+In this application, currently there is one container per pod. Each pod runs an instance of the application container on the cluster nodes independent of one another.
+In need of handling large traffic, we can duplicate the number of pods in deployment to have more instances of each application running.
 We can also increase the number of nodes in the cluster where the scheduled pods run. In case of node failure, identical pods will be scheduled on other nodes in the cluster.
 
 
