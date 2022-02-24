@@ -1,22 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -f docker-compose.yaml
-    kompose.version: 1.26.0 (40646f47)
-  creationTimestamp: null
-  labels:
-    io.kompose.service: postgres
-    tier: database
   name: postgres
+  labels:
+    name: postgres
+    tier: database
 spec:
-#  type: NodePort
-  clusterIP: None
+  type: LoadBalancer
   ports:
-    - name: "5432"
-      port: 5432
-      targetPort: 5432
+    - port: 5432
   selector:
-    io.kompose.service: postgres
-status:
-  loadBalancer: {}
+    name: postgres
+    tier: database
